@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menu Kéo Tâm - Snow Effect</title>
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        background: radial-gradient(circle at top, #001f3f, #000);
+        overflow: hidden;
+        color: white;
+        font-family: "Poppins", sans-serif;
+        text-align: center;
+    }
+
+    /* Loading overlay */
+    #loading {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        transition: opacity 1s ease;
+        z-index: 10;
+    }
+
+    .spinner {
+        border: 5px solid rgba(255,255,255,0.2);
+        border-top: 5px solid #00ffff;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    /* Menu ẩn ban đầu */
+    #menu {
+        display: none;
+        animation: fadeIn 1.2s ease forwards;
+    }
+
+    @keyframes fadeIn {
+        from {opacity: 0; transform: scale(0.95);}
+        to {opacity: 1; transform: scale(1);}
+    }
+
+    .menu-box {
+        background: rgba(0,0,0,0.6);
+        border: 2px solid #00ffff;
+        border-radius: 15px;
+        width: 320px;
+        margin: 50px auto;
+        padding: 20px;
+        backdrop-filter: blur(8px);
+        box-shadow: 0 0 20px #00ffff88;
+    }
+
+    .menu-box h2 {
+        color: #00ffff;
+        text-shadow: 0 0 10px #00ffff;
+    }
+
+    .toggle {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: rgba(255,255,255,0.05);
+        padding: 10px 15px;
+        border-radius: 8px;
+        margin: 10px 0;
+        cursor: pointer;
+    }
+
+    .switch {
+        width: 45px;
+        height: 22px;
+        background: #555;
+        border-radius: 20px;
+        position: relative;
+        transition: background 0.3s;
+    }
+
+    .switch::after {
+        content: '';
+        position: absolute;
+        top: 2px; left: 2px;
+        width: 18px; height: 18px;
+        background: white;
+        border-radius: 50%;
+        transition: transform 0.3s;
+    }
+
+    .active .switch {
+        background: #00ffff;
+    }
+
+    .active .switch::after {
+        transform: translateX(23px);
+    }
+
+    /* Nút bắt đầu */
+    .start-btn {
+        background: #00ffff;
+        border: none;
+        color: black;
+        padding: 12px 30px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: 600;
+        transition: transform 0.2s;
+    }
+    .start-btn:hover {
+        transform: scale(1.05);
+    }
+
+    /* Tuyết rơi */
+    .snowflake {
+        position: fixed;
+        top: -10px;
+        color: #fff;
+        user-select: none;
+        pointer-events: none;
+        z-index: 0;
+        font-size: 1em;
+        animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+        0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+        100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    }
+</style>
+</head>
+<body>
+
+<div id="loading">
+    <button class="start-btn" onclick="startApp()">BẮT ĐẦU</button>
+    <div class="spinner" style="margin-top:20px; display:none;"></div>
+</div>
+
+<div id="menu">
+    <div class="menu-box">
+        <h2>⚙️ MENU HỖ TRỢ KÉO TÂM</h2>
+        <div class="toggle" onclick="toggleFunction(this)">Auto Ghim Tâm <div class="switch"></div></div>
+        <div class="toggle" onclick="toggleFunction(this)">Recsec <div class="switch"></div></div>
+        <div class="toggle" onclick="toggleFunction(this)">VIP AimLock <div class="switch"></div></div>
+        <div class="toggle" onclick="toggleFunction(this)">Sensi Lock <div class="switch"></div></div>
+    </div>
+</div>
+
+<script>
+function startApp() {
+    const btn = document.querySelector('.start-btn');
+    const spinner = document.querySelector('.spinner');
+    btn.style.display = 'none';
+    spinner.style.display = 'block';
+
+    // Bắt đầu hiệu ứng tuyết rơi
+    startSnow();
+
+    setTimeout(() => {
+        document.getElementById('loading').style.opacity = '0';
+        setTimeout(() => {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('menu').style.display = 'block';
+        }, 1000);
+    }, 3000);
+}
+
+function toggleFunction(element) {
+    element.classList.toggle('active');
+    const name = element.textContent.trim();
+    const state = element.classList.contains('active') ? "BẬT" : "TẮT";
+    alert(`${name} đã ${state}`);
+}
+
+// Hiệu ứng tuyết
+function startSnow() {
+    const snowContainer = document.createElement('div');
+    document.body.appendChild(snowContainer);
+    setInterval(() => {
+        const snow = document.createElement('div');
+        snow.classList.add('snowflake');
+        snow.textContent = '❄';
+        snow.style.left = Math.random() * 100 + 'vw';
+        snow.style.fontSize = Math.random() * 10 + 10 + 'px';
+        snow.style.animationDuration = Math.random() * 5 + 5 + 's';
+        document.body.appendChild(snow);
+        setTimeout(() => snow.remove(), 10000);
+    }, 200);
+}
+</script>
+
+</body>
+</html>
